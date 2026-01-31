@@ -1,0 +1,31 @@
+import { Model } from 'mongoose';
+import { InjectModel } from "@nestjs/mongoose";
+import { User } from "../schemas/user.schemas";
+import { UserModel } from '../models/user.model';
+
+export class UserRepository {
+	constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
+
+	async create(user: UserModel): Promise<UserModel> {
+		const createdUser = await this.userModel.create(user);
+		return this.mapToModel(createdUser);
+	}
+
+    async findByEmail(email: string): Promise<UserModel | null> {
+        const userDoc = await this.userModel.findOne({ email: email }).exec();
+        if (!userDoc) {
+            return null;
+        }
+        return this.mapToModel(userDoc);
+    }
+
+	private mapToModel(userDoc: User): UserModel {
+		return {
+			id: userDoc.id,
+			email: userDoc.email,
+            password: userDoc.password,
+			createdAt: userDoc.createdAt,
+			updatedAt: userDoc.updatedAt,
+		};
+	}
+}

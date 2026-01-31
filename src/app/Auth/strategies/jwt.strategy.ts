@@ -3,11 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 
-export interface JwtPayload {
-  sub: string;
-  email: string;
-}
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -18,5 +13,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_SECRET') || 'fallback',
     });
+  }
+
+  generateToken(payload: string): string {
+    const jwt = require('jsonwebtoken');
+    const secret = this.configService.get<string>('JWT_SECRET') || 'fallback';
+    return jwt.sign(payload, secret, { expiresIn: '24h' });
   }
 }
