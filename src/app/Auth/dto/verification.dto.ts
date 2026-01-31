@@ -1,7 +1,10 @@
-import { RegisterDto } from "./register.dto";
-import { IsNotEmpty, Length } from "class-validator";
+import { IsEmail, IsNotEmpty, Length } from "class-validator";
 
-export class VerificationDto extends RegisterDto {
+export class VerificationDto  {
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
+    
     @IsNotEmpty()
     @Length(6, 6)
     verificationCode: string;

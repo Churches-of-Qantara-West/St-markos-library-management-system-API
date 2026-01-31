@@ -13,6 +13,8 @@ export class User extends Document {
     @Prop({ type: String, required: true })
     password: string;
 
+    @Prop({ type: Boolean, required: true })
+    isVerified: boolean;
 
     @Prop({ default: Date.now })
 	createdAt: Date;

@@ -24,6 +24,7 @@ export class UserRepository {
 			id: userDoc.id,
 			email: userDoc.email,
             password: userDoc.password,
+            isVerified: userDoc.isVerified,
 			createdAt: userDoc.createdAt,
 			updatedAt: userDoc.updatedAt,
 		};
