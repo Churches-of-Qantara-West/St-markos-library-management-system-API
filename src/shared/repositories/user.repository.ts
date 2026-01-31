@@ -7,12 +7,12 @@ export class UserRepository {
 	constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
 	async create(user: UserModel): Promise<UserModel> {
-		const createdUser = await this.userModel.create(user);
+		const createdUser: (User | null) = await this.userModel.create(user);
 		return this.mapToModel(createdUser);
 	}
 
     async findByEmail(email: string): Promise<UserModel | null> {
-        const userDoc = await this.userModel.findOne({ email: email }).exec();
+        const userDoc: (User | null) = await this.userModel.findOne({ email: email }).exec();
         if (!userDoc) {
             return null;
         }

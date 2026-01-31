@@ -11,17 +11,17 @@ export class VerificationRepository {
   ) {}
 
   async create(data: VerificationModel): Promise<VerificationModel> {
-    const doc = await this.verificationModel.create(data);
+    const doc: (Verification | null) = await this.verificationModel.create(data);
     return this.mapToModel(doc);
   }
 
   async findByEmail(email: string): Promise<VerificationModel | null> {
-    const doc = await this.verificationModel.findOne({ email }).exec();
+    const doc: (Verification | null) = await this.verificationModel.findOne({ email }).exec();
     return doc ? this.mapToModel(doc) : null;
   }
 
   async updateCode(email: string, code: string): Promise<VerificationModel | null> {
-    const doc = await this.verificationModel.findOneAndUpdate(
+    const doc: (Verification | null) = await this.verificationModel.findOneAndUpdate(
       { email },
       { verificationCode: code, updatedAt: new Date() },
       { new: true }
