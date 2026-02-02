@@ -10,7 +10,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 @Module({
   imports: [
-    ConfigModule,
+    // ConfigModule removed to use global instance
     PassportModule,
     TypeOrmModule.forFeature([]),
     JwtModule.registerAsync({

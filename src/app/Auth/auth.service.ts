@@ -8,12 +8,14 @@ import { UserMapper } from "src/shared/mappers/user.mapper";
 import { VerificationRepository } from 'src/shared/repositories/verification.repository';
 import { UserModel } from 'src/shared/models/user.model';
 import { VerificationDto } from './dto/verification.dto';
+import { MailerService } from 'src/shared/mailtrap/mailer.service'
 
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtStrategy: JwtStrategy,
+    private readonly mailerService: MailerService,
     private readonly userRepository: UserRepository,
     private readonly verificationRepository: VerificationRepository,
   ) {}
@@ -61,12 +63,15 @@ export class AuthService {
 
     // 3 - create verification code & send email (handled in controller)
     const randomCode: string = this.randomCode();
-    this.verificationRepository.create({
+    await this.verificationRepository.create({
       email: user.email,
       verificationCode: randomCode,
     });
 
-    // 4 - Return verification code dto
+    // 4 - Send verification Email    
+    this.mailerService.sendVerificationEmail(user.name, user.email, randomCode);
+
+    // 5 - Return verification code dto
     return {
       email: user.email,
       verificationCode: randomCode,
