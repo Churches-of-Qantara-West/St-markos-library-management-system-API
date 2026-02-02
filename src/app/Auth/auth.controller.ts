@@ -17,4 +17,9 @@ export class AuthController {
   async register(@Body() user: RegisterDto): Promise<VerificationDto> {
     return this.authService.register(user);
   }
+
+  @Post('verify')
+  async verify(@Body() verification: VerificationDto): Promise<{ message: string }> {
+    return this.authService.verify(verification);
+  }
 } 

@@ -19,6 +19,10 @@ export class UserRepository {
         return this.mapToModel(userDoc);
     }
 
+	async updateVerificationStatus(email: string, isVerified: boolean): Promise<void> {
+		await this.userModel.updateOne({ email: email }, { isVerified: isVerified }).exec();
+	}
+
 	private mapToModel(userDoc: User): UserModel {
 		return {
 			email: userDoc.email,

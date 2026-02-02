@@ -78,6 +78,27 @@ export class AuthService {
     };
   }
 
+  async verify(verification: VerificationDto): Promise<{ message: string }> {
+    // 1 - find verification record
+    const record = await this.verificationRepository.findByEmail(verification.email);
+    if (!record || verification.verificationCode !== record.verificationCode) {
+      throw new BadRequestException('Invalid verification code or email');
+    }
+
+    // 2 - mark user as verified
+    const user = await this.userRepository.findByEmail(verification.email);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    await this.userRepository.updateVerificationStatus(verification.email, true);
+
+    // 3 - delete verification record
+    await this.verificationRepository.deleteByEmail(verification.email);
+
+    return { message: 'User verified successfully' };
+  }  
+
   // Generate a 6-digit random verification code
   private randomCode(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();
