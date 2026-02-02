@@ -21,7 +21,6 @@ export class UserRepository {
 
 	private mapToModel(userDoc: User): UserModel {
 		return {
-			id: userDoc.id,
 			email: userDoc.email,
             password: userDoc.password,
             isVerified: userDoc.isVerified,

@@ -1,7 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
 
 export class RegisterDto {
-  @IsEmail()
+  @IsEmail({}, { message: 'Please enter a valid email address' })
+  @Matches(/^[a-z0-9](\.?[a-z0-9]){5,}@gmail\.com$/, {
+    message: 'Only valid Gmail addresses are allowed',
+  })
   @IsNotEmpty()
   email: string;
 

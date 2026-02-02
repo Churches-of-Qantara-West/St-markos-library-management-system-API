@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  generateToken(payload: string): string {
+  generateToken(payload: { email: string }): string {
     const secret: string = this.configService.get<string>('JWT_SECRET') || '';
     return jwt.sign(payload, secret, { expiresIn: '24h' });
   }
