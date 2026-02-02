@@ -4,6 +4,7 @@ import { UserModel } from "../models/user.model";
 export class UserMapper {
     static registerDtoToModel(dto: RegisterDto): UserModel {
         return {
+            name: dto.name,
             email: dto.email,
             password: dto.password,
             isVerified: false, 

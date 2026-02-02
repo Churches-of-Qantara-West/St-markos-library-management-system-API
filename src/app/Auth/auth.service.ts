@@ -9,6 +9,7 @@ import { VerificationRepository } from 'src/shared/repositories/verification.rep
 import { UserModel } from 'src/shared/models/user.model';
 import { VerificationDto } from './dto/verification.dto';
 import { MailerService } from 'src/shared/mailtrap/mailer.service'
+import { ResendVerificationCodeDto } from './dto/resend-verification-code.dto';
 
 
 @Injectable()
@@ -47,7 +48,7 @@ export class AuthService {
   }
 
 
-  async register(user: RegisterDto): Promise<VerificationDto> {
+  async register(user: RegisterDto): Promise<{message: string}> {
     // 1 - check if user already exists
     const existingUser: (UserModel | null) = await this.userRepository.findByEmail(user.email);
     if (existingUser) {
@@ -73,8 +74,7 @@ export class AuthService {
 
     // 5 - Return verification code dto
     return {
-      email: user.email,
-      verificationCode: randomCode,
+      message: 'User registered successfully. Please check your email for the verification code.'
     };
   }
 
@@ -98,6 +98,40 @@ export class AuthService {
 
     return { message: 'User verified successfully' };
   }  
+
+  async resendVerification(resendVerificationCodeDto: ResendVerificationCodeDto) {
+    // 1 - check if user exists
+    const user = await this.userRepository.findByEmail(resendVerificationCodeDto.email);
+    if (!user) {
+      throw new BadRequestException('User with this email does not exist');
+    }
+
+    // 2 - generate new verification code
+    const newCode = this.randomCode();
+
+    // 3 - update or create verification record
+    const existingRecord = await this.verificationRepository.findByEmail(resendVerificationCodeDto.email);
+    if (existingRecord) {
+      await this.verificationRepository.updateCode(resendVerificationCodeDto.email, newCode);
+    } else {
+      throw new BadRequestException('No existing verification record found for this email');
+    }
+
+    // 4 - get user name
+    const userData = await this.userRepository.findByEmail(resendVerificationCodeDto.email);
+    if (!userData) {
+      throw new BadRequestException('User with this email does not exist');
+    } 
+
+    if (userData.isVerified) {
+      throw new BadRequestException('User is already verified');
+    }
+
+    // 4 - send verification email
+    this.mailerService.sendVerificationEmail(userData.name, resendVerificationCodeDto.email, newCode);
+    
+    return { message: 'Verification code resent successfully' };
+  }
 
   // Generate a 6-digit random verification code
   private randomCode(): string {
