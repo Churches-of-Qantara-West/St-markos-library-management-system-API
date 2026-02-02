@@ -38,8 +38,7 @@ export class MailerService {
 
     this.sender = {
       email:
-        this.configService.get<string>('MAILER_EMAIL') ||
-        'no-reply@st-markos-library.com',
+        this.configService.get<string>('MAILER_EMAIL') || 'st-markos-library.com',
       name:
         this.configService.get<string>('MAILER_NAME') || 'St Markos Library',
     };
@@ -85,11 +84,7 @@ export class MailerService {
     return await this.sendEmail(recipients, subject, content);
   }
 
-  private async sendEmail(
-    recipients: Recipients,
-    subject: string,
-    content: string,
-  ) {
+  private async sendEmail(recipients: Recipients, subject: string, content: string) {
     try {
       console.log(
         'Attempting to send email to:',
@@ -101,7 +96,7 @@ export class MailerService {
         subject,
         html: content,
       });
-      console.log(`Email sent successfully! Message ID: ${info.messageId}`);
+      console.log(`Email sent successfully! to: ${info.accepted.join(', ')}`);
     } catch (error) {
       console.error(
         `Error sending email to ${JSON.stringify(recipients)} -- error:`,

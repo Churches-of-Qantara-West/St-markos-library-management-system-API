@@ -12,7 +12,7 @@ import { UserMapper } from 'src/shared/mappers/user.mapper';
 import { VerificationRepository } from 'src/shared/repositories/verification.repository';
 import { UserModel } from 'src/shared/models/user.model';
 import { VerificationDto } from './dto/verification.dto';
-import { MailerService } from 'src/shared/mailtrap/mailer.service';
+import { MailerService } from 'src/shared/mailer/mailer.service';
 import { ResendVerificationCodeDto } from './dto/resend-verification-code.dto';
 
 @Injectable()
