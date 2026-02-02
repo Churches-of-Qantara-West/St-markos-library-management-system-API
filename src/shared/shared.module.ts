@@ -5,7 +5,10 @@ import { UserRepository } from './repositories/user.repository';
 import { VerificationRepository } from './repositories/verification.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schemas';
-import { Verification, VerificationSchema } from './schemas/verification.schemas';
+import {
+  Verification,
+  VerificationSchema,
+} from './schemas/verification.schemas';
 
 @Module({
   imports: [

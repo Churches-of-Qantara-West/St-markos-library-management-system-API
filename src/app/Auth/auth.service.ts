@@ -1,16 +1,19 @@
 import * as bcrypt from 'bcryptjs';
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtStrategy } from "./strategies/jwt.strategy";
-import { LoginDto } from "./dto/login.dto";
-import { UserRepository } from "src/shared/repositories/user.repository";
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { LoginDto } from './dto/login.dto';
+import { UserRepository } from 'src/shared/repositories/user.repository';
 import { RegisterDto } from './dto/register.dto';
-import { UserMapper } from "src/shared/mappers/user.mapper";
+import { UserMapper } from 'src/shared/mappers/user.mapper';
 import { VerificationRepository } from 'src/shared/repositories/verification.repository';
 import { UserModel } from 'src/shared/models/user.model';
 import { VerificationDto } from './dto/verification.dto';
-import { MailerService } from 'src/shared/mailtrap/mailer.service'
+import { MailerService } from 'src/shared/mailtrap/mailer.service';
 import { ResendVerificationCodeDto } from './dto/resend-verification-code.dto';
-
 
 @Injectable()
 export class AuthService {
@@ -23,34 +26,43 @@ export class AuthService {
 
   async login(user: LoginDto): Promise<{ access_token: string }> {
     // 1 - find user by email
-    const foundUser: (UserModel | null) = await this.userRepository.findByEmail(user.email); 
+    const foundUser: UserModel | null = await this.userRepository.findByEmail(
+      user.email,
+    );
 
     // 2- validate user credentials & verification status
     if (!foundUser) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid: boolean = await bcrypt.compare(user.password, foundUser.password);
+    const isPasswordValid: boolean = await bcrypt.compare(
+      user.password,
+      foundUser.password,
+    );
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     if (!foundUser.isVerified) {
-      throw new UnauthorizedException('User is not verified, please verify your email before logging in');
+      throw new UnauthorizedException(
+        'User is not verified, please verify your email before logging in',
+      );
     }
 
     // 3 - generate JWT token
-    const token: string = this.jwtStrategy.generateToken({ email: foundUser.email });
+    const token: string = this.jwtStrategy.generateToken({
+      email: foundUser.email,
+    });
 
     return {
       access_token: token,
     };
   }
 
-
-  async register(user: RegisterDto): Promise<{message: string}> {
+  async register(user: RegisterDto): Promise<{ message: string }> {
     // 1 - check if user already exists
-    const existingUser: (UserModel | null) = await this.userRepository.findByEmail(user.email);
+    const existingUser: UserModel | null =
+      await this.userRepository.findByEmail(user.email);
     if (existingUser) {
       throw new BadRequestException('User with this email already exists');
     }
@@ -69,18 +81,21 @@ export class AuthService {
       verificationCode: randomCode,
     });
 
-    // 4 - Send verification Email    
+    // 4 - Send verification Email
     this.mailerService.sendVerificationEmail(user.name, user.email, randomCode);
 
     // 5 - Return verification code dto
     return {
-      message: 'User registered successfully. Please check your email for the verification code.'
+      message:
+        'User registered successfully. Please check your email for the verification code.',
     };
   }
 
   async verify(verification: VerificationDto): Promise<{ message: string }> {
     // 1 - find verification record
-    const record = await this.verificationRepository.findByEmail(verification.email);
+    const record = await this.verificationRepository.findByEmail(
+      verification.email,
+    );
     if (!record || verification.verificationCode !== record.verificationCode) {
       throw new BadRequestException('Invalid verification code or email');
     }
@@ -91,17 +106,24 @@ export class AuthService {
       throw new BadRequestException('User not found');
     }
 
-    await this.userRepository.updateVerificationStatus(verification.email, true);
+    await this.userRepository.updateVerificationStatus(
+      verification.email,
+      true,
+    );
 
     // 3 - delete verification record
     await this.verificationRepository.deleteByEmail(verification.email);
 
     return { message: 'User verified successfully' };
-  }  
+  }
 
-  async resendVerification(resendVerificationCodeDto: ResendVerificationCodeDto) {
+  async resendVerification(
+    resendVerificationCodeDto: ResendVerificationCodeDto,
+  ) {
     // 1 - check if user exists
-    const user = await this.userRepository.findByEmail(resendVerificationCodeDto.email);
+    const user = await this.userRepository.findByEmail(
+      resendVerificationCodeDto.email,
+    );
     if (!user) {
       throw new BadRequestException('User with this email does not exist');
     }
@@ -110,26 +132,39 @@ export class AuthService {
     const newCode = this.randomCode();
 
     // 3 - update or create verification record
-    const existingRecord = await this.verificationRepository.findByEmail(resendVerificationCodeDto.email);
+    const existingRecord = await this.verificationRepository.findByEmail(
+      resendVerificationCodeDto.email,
+    );
     if (existingRecord) {
-      await this.verificationRepository.updateCode(resendVerificationCodeDto.email, newCode);
+      await this.verificationRepository.updateCode(
+        resendVerificationCodeDto.email,
+        newCode,
+      );
     } else {
-      throw new BadRequestException('No existing verification record found for this email');
+      throw new BadRequestException(
+        'No existing verification record found for this email',
+      );
     }
 
     // 4 - get user name
-    const userData = await this.userRepository.findByEmail(resendVerificationCodeDto.email);
+    const userData = await this.userRepository.findByEmail(
+      resendVerificationCodeDto.email,
+    );
     if (!userData) {
       throw new BadRequestException('User with this email does not exist');
-    } 
+    }
 
     if (userData.isVerified) {
       throw new BadRequestException('User is already verified');
     }
 
     // 4 - send verification email
-    this.mailerService.sendVerificationEmail(userData.name, resendVerificationCodeDto.email, newCode);
-    
+    this.mailerService.sendVerificationEmail(
+      userData.name,
+      resendVerificationCodeDto.email,
+      newCode,
+    );
+
     return { message: 'Verification code resent successfully' };
   }
 
@@ -137,5 +172,4 @@ export class AuthService {
   private randomCode(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
-
 }

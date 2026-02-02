@@ -7,25 +7,33 @@ import { VerificationModel } from '../models/verification.model';
 @Injectable()
 export class VerificationRepository {
   constructor(
-    @InjectModel(Verification.name) private readonly verificationModel: Model<Verification>,
+    @InjectModel(Verification.name)
+    private readonly verificationModel: Model<Verification>,
   ) {}
 
   async create(data: VerificationModel): Promise<VerificationModel> {
-    const doc: (Verification | null) = await this.verificationModel.create(data);
+    const doc: Verification | null = await this.verificationModel.create(data);
     return this.mapToModel(doc);
   }
 
   async findByEmail(email: string): Promise<VerificationModel | null> {
-    const doc: (Verification | null) = await this.verificationModel.findOne({ email }).exec();
+    const doc: Verification | null = await this.verificationModel
+      .findOne({ email })
+      .exec();
     return doc ? this.mapToModel(doc) : null;
   }
 
-  async updateCode(email: string, code: string): Promise<VerificationModel | null> {
-    const doc: (Verification | null) = await this.verificationModel.findOneAndUpdate(
-      { email },
-      { verificationCode: code, updatedAt: new Date() },
-      { new: true }
-    ).exec();
+  async updateCode(
+    email: string,
+    code: string,
+  ): Promise<VerificationModel | null> {
+    const doc: Verification | null = await this.verificationModel
+      .findOneAndUpdate(
+        { email },
+        { verificationCode: code, updatedAt: new Date() },
+        { new: true },
+      )
+      .exec();
     return doc ? this.mapToModel(doc) : null;
   }
 

@@ -17,11 +17,9 @@ import { SharedModule } from './shared/shared.module';
       inject: [ConfigService],
     }),
     AuthModule,
-    SharedModule
+    SharedModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
