@@ -38,7 +38,8 @@ export class MailerService {
 
     this.sender = {
       email:
-        this.configService.get<string>('MAILER_EMAIL') || 'st-markos-library.com',
+        this.configService.get<string>('MAILER_EMAIL') ||
+        'st-markos-library.com',
       name:
         this.configService.get<string>('MAILER_NAME') || 'St Markos Library',
     };
@@ -84,7 +85,11 @@ export class MailerService {
     return await this.sendEmail(recipients, subject, content);
   }
 
-  private async sendEmail(recipients: Recipients, subject: string, content: string) {
+  private async sendEmail(
+    recipients: Recipients,
+    subject: string,
+    content: string,
+  ) {
     try {
       console.log(
         'Attempting to send email to:',
