@@ -72,6 +72,7 @@ export class BookingRepository {
 
   private mapToModel(bookingDoc: Booking): BookingModel {
     return {
+      id: bookingDoc._id?.toString(),
       image: bookingDoc.image,
       title: bookingDoc.title,
       subtitle: bookingDoc.subtitle,

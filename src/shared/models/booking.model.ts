@@ -1,4 +1,5 @@
 export class BookingModel {
+  id?: string;
   image: string;
   title: string;
   subtitle: string;
