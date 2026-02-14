@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateBookingDto } from './dto/update-booking.dto';
+import { SearchBookingDto } from './dto/search-booking.dto';
 import { BookingRepository } from 'src/shared/repositories/booking.repository';
 import { BookingModel } from 'src/shared/models/booking.model';
 import { BookingMapper } from 'src/shared/mappers/booking.mapper';
@@ -36,5 +37,9 @@ export class BookingService {
 
   remove(id: string) {
     return this.bookingRepository.delete(id);
+  }
+
+  searchBooks(searchParams: SearchBookingDto) {
+    return this.bookingRepository.search(searchParams);
   }
 }

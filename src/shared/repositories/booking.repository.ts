@@ -2,8 +2,17 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Booking } from '../schemas/booking.schemas';
 import { BookingModel } from '../models/booking.model';
+import { SearchBookingDto } from 'src/app/booking/dto/search-booking.dto';
 
 export class BookingRepository {
+  readonly searchableFields = [
+    'title',
+    'categories',
+    'authors',
+    'translators',
+    'publishers',
+  ];
+
   constructor(
     @InjectModel(Booking.name) private readonly bookingModel: Model<Booking>,
   ) {}
@@ -43,6 +52,22 @@ export class BookingRepository {
   async delete(id: string): Promise<boolean> {
     const result = await this.bookingModel.findByIdAndDelete(id).exec();
     return result !== null;
+  }
+
+  async search(searchParams: SearchBookingDto): Promise<BookingModel[]> {
+    const query = this.searchableFields.reduce(
+      (acc, field) => {
+        const value = searchParams[field as keyof SearchBookingDto];
+        if (value) {
+          acc[field] = { $regex: value, $options: 'i' };
+        }
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+
+    const bookings = await this.bookingModel.find(query).exec();
+    return bookings.map(this.mapToModel.bind(this));
   }
 
   private mapToModel(bookingDoc: Booking): BookingModel {
