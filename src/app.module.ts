@@ -5,6 +5,7 @@ import { AuthModule } from './app/Auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SharedModule } from './shared/shared.module';
+import { BookingModule } from './app/booking/booking.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SharedModule } from './shared/shared.module';
     }),
     AuthModule,
     SharedModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
