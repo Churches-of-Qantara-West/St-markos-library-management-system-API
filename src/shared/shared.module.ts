@@ -9,8 +9,8 @@ import {
   Verification,
   VerificationSchema,
 } from './schemas/verification.schemas';
-import { Booking, BookingSchema } from './schemas/booking.schemas';
-import { BookingRepository } from './repositories/booking.repository';
+import { Book, BookSchema } from './schemas/booking.schemas';
+import { BookRepository } from './repositories/booking.repository';
 
 @Module({
   imports: [
@@ -18,19 +18,19 @@ import { BookingRepository } from './repositories/booking.repository';
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Verification.name, schema: VerificationSchema },
-      { name: Booking.name, schema: BookingSchema },
+      { name: Book.name, schema: BookSchema },
     ]),
   ],
   providers: [
     UserRepository,
     VerificationRepository,
-    BookingRepository,
+    BookRepository,
     MailerService,
   ],
   exports: [
     UserRepository,
     VerificationRepository,
-    BookingRepository,
+    BookRepository,
     MailerService,
   ],
 })

@@ -1,10 +1,10 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Booking } from '../schemas/booking.schemas';
+import { Book } from '../schemas/booking.schemas';
 import { BookingModel } from '../models/booking.model';
 import { SearchBookingDto } from 'src/app/booking/dto/search-booking.dto';
 
-export class BookingRepository {
+export class BookRepository {
   readonly searchableFields = [
     'title',
     'categories',
@@ -14,43 +14,42 @@ export class BookingRepository {
   ];
 
   constructor(
-    @InjectModel(Booking.name) private readonly bookingModel: Model<Booking>,
+    @InjectModel(Book.name) private readonly bookModel: Model<Book>,
   ) {}
 
-  async create(booking: BookingModel): Promise<BookingModel> {
-    const createdBooking: Booking | null =
-      await this.bookingModel.create(booking);
-    return this.mapToModel(createdBooking);
+  async create(book: BookingModel): Promise<BookingModel> {
+    const createdBook: Book | null = await this.bookModel.create(book);
+    return this.mapToModel(createdBook);
   }
 
   async findAll(): Promise<BookingModel[]> {
-    const bookings: Booking[] = await this.bookingModel.find().exec();
-    return bookings.map((booking) => this.mapToModel(booking));
+    const books: Book[] = await this.bookModel.find().exec();
+    return books.map((book) => this.mapToModel(book));
   }
 
   async findById(id: string): Promise<BookingModel | null> {
-    const booking: Booking | null = await this.bookingModel.findById(id).exec();
-    if (!booking) {
+    const book: Book | null = await this.bookModel.findById(id).exec();
+    if (!book) {
       return null;
     }
-    return this.mapToModel(booking);
+    return this.mapToModel(book);
   }
 
   async update(
     id: string,
-    booking: Partial<BookingModel>,
+    book: Partial<BookingModel>,
   ): Promise<BookingModel | null> {
-    const updatedBooking: Booking | null = await this.bookingModel
-      .findByIdAndUpdate(id, booking, { new: true })
+    const updatedBook: Book | null = await this.bookModel
+      .findByIdAndUpdate(id, book, { new: true })
       .exec();
-    if (!updatedBooking) {
+    if (!updatedBook) {
       return null;
     }
-    return this.mapToModel(updatedBooking);
+    return this.mapToModel(updatedBook);
   }
 
   async delete(id: string): Promise<boolean> {
-    const result = await this.bookingModel.findByIdAndDelete(id).exec();
+    const result = await this.bookModel.findByIdAndDelete(id).exec();
     return result !== null;
   }
 
@@ -66,27 +65,27 @@ export class BookingRepository {
       {} as Record<string, any>,
     );
 
-    const bookings = await this.bookingModel.find(query).exec();
-    return bookings.map(this.mapToModel.bind(this));
+    const books = await this.bookModel.find(query).exec();
+    return books.map(this.mapToModel.bind(this));
   }
 
-  private mapToModel(bookingDoc: Booking): BookingModel {
+  private mapToModel(bookDoc: Book): BookingModel {
     return {
-      id: bookingDoc._id?.toString(),
-      image: bookingDoc.image,
-      title: bookingDoc.title,
-      subtitle: bookingDoc.subtitle,
-      authors: bookingDoc.authors,
-      translators: bookingDoc.translators,
-      categories: bookingDoc.categories,
-      series: bookingDoc.series,
-      numberInSeries: bookingDoc.numberInSeries,
-      publishers: bookingDoc.publishers,
-      description: bookingDoc.description,
-      pages: bookingDoc.pages,
-      numberOfCopies: bookingDoc.numberOfCopies,
-      createdAt: bookingDoc.createdAt,
-      updatedAt: bookingDoc.updatedAt,
+      id: bookDoc._id?.toString(),
+      image: bookDoc.image,
+      title: bookDoc.title,
+      subtitle: bookDoc.subtitle,
+      authors: bookDoc.authors,
+      translators: bookDoc.translators,
+      categories: bookDoc.categories,
+      series: bookDoc.series,
+      numberInSeries: bookDoc.numberInSeries,
+      publishers: bookDoc.publishers,
+      description: bookDoc.description,
+      pages: bookDoc.pages,
+      numberOfCopies: bookDoc.numberOfCopies,
+      createdAt: bookDoc.createdAt,
+      updatedAt: bookDoc.updatedAt,
     };
   }
 }

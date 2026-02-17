@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema({ collection: 'bookings', timestamps: true, versionKey: false })
-export class Booking extends Document {
+@Schema({ collection: 'books', timestamps: true, versionKey: false })
+export class Book extends Document {
   @Prop({ type: String, required: true })
   image: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, unique: true, required: true })
   title: string;
 
   @Prop({ type: String, required: false })
@@ -46,4 +46,4 @@ export class Booking extends Document {
   updatedAt: Date;
 }
 
-export const BookingSchema = SchemaFactory.createForClass(Booking);
+export const BookSchema = SchemaFactory.createForClass(Book);

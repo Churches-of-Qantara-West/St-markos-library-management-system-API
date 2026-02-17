@@ -3,9 +3,7 @@ import { DailyHealthService } from './healthCheck/mongodb';
 import { TerminusModule } from '@nestjs/terminus';
 
 @Module({
-  imports: [
-    TerminusModule,
-  ],
+  imports: [TerminusModule],
   providers: [DailyHealthService],
   exports: [DailyHealthService],
 })

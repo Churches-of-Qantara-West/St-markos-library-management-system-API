@@ -9,11 +9,9 @@ async function bootstrap() {
   // Enable global validation pipe
   app.useGlobalPipes(new ValidationPipe());
 
-
   // Manually trigger the daily MongoDB health check on application startup
   const dailyHealthService: DailyHealthService = app.get(DailyHealthService);
   await dailyHealthService.runDailyCheckMongoDb();
-  
 
   await app.listen(process.env.PORT ?? 3000);
 }
