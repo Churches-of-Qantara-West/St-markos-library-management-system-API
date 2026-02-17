@@ -16,8 +16,7 @@ import { SharedModule } from '../../shared/shared.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret:
-          configService.get<string>('JWT_SECRET') || 'fallback-secret-key',
+        secret: configService.get<string>('JWT_SECRET') || 'fallback-secret-key',
         signOptions: { expiresIn: '24h' },
       }),
       inject: [ConfigService],

@@ -37,11 +37,8 @@ export class MailerService {
     });
 
     this.sender = {
-      email:
-        this.configService.get<string>('MAILER_EMAIL') ||
-        'st-markos-library.com',
-      name:
-        this.configService.get<string>('MAILER_NAME') || 'St Markos Library',
+      email: this.configService.get<string>('MAILER_EMAIL') || 'st-markos-library.com',
+      name: this.configService.get<string>('MAILER_NAME') || 'St Markos Library',
     };
 
     // Verify connection
@@ -54,11 +51,7 @@ export class MailerService {
     });
   }
 
-  async sendVerificationEmail(
-    name: string,
-    toMail: string,
-    verificationCode: string,
-  ) {
+  async sendVerificationEmail(name: string, toMail: string, verificationCode: string) {
     const recipients: Recipients = [
       {
         email: toMail,
@@ -85,16 +78,9 @@ export class MailerService {
     return await this.sendEmail(recipients, subject, content);
   }
 
-  private async sendEmail(
-    recipients: Recipients,
-    subject: string,
-    content: string,
-  ) {
+  private async sendEmail(recipients: Recipients, subject: string, content: string) {
     try {
-      console.log(
-        'Attempting to send email to:',
-        recipients.map((r) => r.email).join(', '),
-      );
+      console.log('Attempting to send email to:', recipients.map((r) => r.email).join(', '));
       const info = await this.transporter.sendMail({
         from: `"${this.sender.name}" <${this.sender.email}>`,
         to: recipients.map((r) => r.email).join(', '),
@@ -103,10 +89,7 @@ export class MailerService {
       });
       console.log(`Email sent successfully! to: ${info.accepted.join(', ')}`);
     } catch (error) {
-      console.error(
-        `Error sending email to ${JSON.stringify(recipients)} -- error:`,
-        error,
-      );
+      console.error(`Error sending email to ${JSON.stringify(recipients)} -- error:`, error);
       throw error; // Re-throw to let caller know it failed
     }
   }

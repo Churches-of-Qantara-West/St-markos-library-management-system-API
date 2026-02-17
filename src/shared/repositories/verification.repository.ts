@@ -17,22 +17,13 @@ export class VerificationRepository {
   }
 
   async findByEmail(email: string): Promise<VerificationModel | null> {
-    const doc: Verification | null = await this.verificationModel
-      .findOne({ email })
-      .exec();
+    const doc: Verification | null = await this.verificationModel.findOne({ email }).exec();
     return doc ? this.mapToModel(doc) : null;
   }
 
-  async updateCode(
-    email: string,
-    code: string,
-  ): Promise<VerificationModel | null> {
+  async updateCode(email: string, code: string): Promise<VerificationModel | null> {
     const doc: Verification | null = await this.verificationModel
-      .findOneAndUpdate(
-        { email },
-        { verificationCode: code, updatedAt: new Date() },
-        { new: true },
-      )
+      .findOneAndUpdate({ email }, { verificationCode: code, updatedAt: new Date() }, { new: true })
       .exec();
     return doc ? this.mapToModel(doc) : null;
   }

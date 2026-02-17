@@ -20,16 +20,12 @@ export class AuthController {
   }
 
   @Post('verify')
-  async verify(
-    @Body() verification: VerificationDto,
-  ): Promise<{ message: string }> {
+  async verify(@Body() verification: VerificationDto): Promise<{ message: string }> {
     return this.authService.verify(verification);
   }
 
   @Get('resend-verification')
-  async resendVerification(
-    @Body() resendVerificationCodeDto: ResendVerificationCodeDto,
-  ): Promise<{ message: string }> {
+  async resendVerification(@Body() resendVerificationCodeDto: ResendVerificationCodeDto): Promise<{ message: string }> {
     return this.authService.resendVerification(resendVerificationCodeDto);
   }
 }

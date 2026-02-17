@@ -15,14 +15,10 @@ export class DailyHealthService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async runDailyCheckMongoDb() {
     try {
-      const result = await this.health.check([
-        () => this.mongooseHealth.pingCheck('mongodb', { timeout: 3000 }),
-      ]);
+      const result = await this.health.check([() => this.mongooseHealth.pingCheck('mongodb', { timeout: 3000 })]);
       this.logger.log(`Daily MongoDB Status: ${result.status.toUpperCase()}`);
     } catch (error) {
-      this.logger.error(
-        `CRITICAL: Daily MongoDB Health Check Failed: ${error.stack}`,
-      );
+      this.logger.error(`CRITICAL: Daily MongoDB Health Check Failed: ${error.stack}`);
     }
   }
 }

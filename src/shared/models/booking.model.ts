@@ -1,4 +1,4 @@
-export class BookingModel {
+export class BookModel {
   id?: string;
   image: string;
   title: string;

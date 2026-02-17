@@ -4,9 +4,7 @@ import { User } from '../schemas/user.schemas';
 import { UserModel } from '../models/user.model';
 
 export class UserRepository {
-  constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
-  ) {}
+  constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
   async create(user: UserModel): Promise<UserModel> {
     const createdUser: User | null = await this.userModel.create(user);
@@ -14,22 +12,15 @@ export class UserRepository {
   }
 
   async findByEmail(email: string): Promise<UserModel | null> {
-    const userDoc: User | null = await this.userModel
-      .findOne({ email: email })
-      .exec();
+    const userDoc: User | null = await this.userModel.findOne({ email: email }).exec();
     if (!userDoc) {
       return null;
     }
     return this.mapToModel(userDoc);
   }
 
-  async updateVerificationStatus(
-    email: string,
-    isVerified: boolean,
-  ): Promise<void> {
-    await this.userModel
-      .updateOne({ email: email }, { isVerified: isVerified })
-      .exec();
+  async updateVerificationStatus(email: string, isVerified: boolean): Promise<void> {
+    await this.userModel.updateOne({ email: email }, { isVerified: isVerified }).exec();
   }
 
   private mapToModel(userDoc: User): UserModel {

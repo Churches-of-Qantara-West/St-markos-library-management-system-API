@@ -1,33 +1,25 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Book } from '../schemas/booking.schemas';
-import { BookingModel } from '../models/booking.model';
+import { BookModel } from '../models/booking.model';
 import { SearchBookingDto } from 'src/app/booking/dto/search-booking.dto';
 
 export class BookRepository {
-  readonly searchableFields = [
-    'title',
-    'categories',
-    'authors',
-    'translators',
-    'publishers',
-  ];
+  readonly searchableFields = ['title', 'categories', 'authors', 'translators', 'publishers'];
 
-  constructor(
-    @InjectModel(Book.name) private readonly bookModel: Model<Book>,
-  ) {}
+  constructor(@InjectModel(Book.name) private readonly bookModel: Model<Book>) {}
 
-  async create(book: BookingModel): Promise<BookingModel> {
+  async create(book: BookModel): Promise<BookModel> {
     const createdBook: Book | null = await this.bookModel.create(book);
     return this.mapToModel(createdBook);
   }
 
-  async findAll(): Promise<BookingModel[]> {
+  async findAll(): Promise<BookModel[]> {
     const books: Book[] = await this.bookModel.find().exec();
     return books.map((book) => this.mapToModel(book));
   }
 
-  async findById(id: string): Promise<BookingModel | null> {
+  async findById(id: string): Promise<BookModel | null> {
     const book: Book | null = await this.bookModel.findById(id).exec();
     if (!book) {
       return null;
@@ -35,13 +27,16 @@ export class BookRepository {
     return this.mapToModel(book);
   }
 
-  async update(
-    id: string,
-    book: Partial<BookingModel>,
-  ): Promise<BookingModel | null> {
-    const updatedBook: Book | null = await this.bookModel
-      .findByIdAndUpdate(id, book, { new: true })
-      .exec();
+  async findByTitle(title: string): Promise<BookModel | null> {
+    const book: Book | null = await this.bookModel.findOne({ title: title }).exec();
+    if (!book) {
+      return null;
+    }
+    return this.mapToModel(book);
+  }
+
+  async update(id: string, book: Partial<BookModel>): Promise<BookModel | null> {
+    const updatedBook: Book | null = await this.bookModel.findByIdAndUpdate(id, book, { new: true }).exec();
     if (!updatedBook) {
       return null;
     }
@@ -53,7 +48,7 @@ export class BookRepository {
     return result !== null;
   }
 
-  async search(searchParams: SearchBookingDto): Promise<BookingModel[]> {
+  async search(searchParams: SearchBookingDto): Promise<BookModel[]> {
     const query = this.searchableFields.reduce(
       (acc, field) => {
         const value = searchParams[field as keyof SearchBookingDto];
@@ -69,7 +64,7 @@ export class BookRepository {
     return books.map(this.mapToModel.bind(this));
   }
 
-  private mapToModel(bookDoc: Book): BookingModel {
+  private mapToModel(bookDoc: Book): BookModel {
     return {
       id: bookDoc._id?.toString(),
       image: bookDoc.image,

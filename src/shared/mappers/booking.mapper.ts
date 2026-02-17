@@ -1,9 +1,9 @@
 import { CreateBookingDto } from 'src/app/booking/dto/create-booking.dto';
-import { BookingModel } from '../models/booking.model';
+import { BookModel } from '../models/booking.model';
 import { UpdateBookingDto } from 'src/app/booking/dto/update-booking.dto';
 
 export class BookingMapper {
-  static createDtoToModel(dto: CreateBookingDto): BookingModel {
+  static createDtoToModel(dto: CreateBookingDto): BookModel {
     return {
       image: dto.image,
       title: dto.title,
@@ -22,10 +22,7 @@ export class BookingMapper {
     };
   }
 
-  static updateDtoToModel(
-    dto: UpdateBookingDto,
-    existingModel: BookingModel,
-  ): Partial<BookingModel> {
+  static updateDtoToModel(dto: UpdateBookingDto, existingModel: BookModel): Partial<BookModel> {
     return {
       image: dto.image || existingModel.image,
       title: dto.title || existingModel.title,
