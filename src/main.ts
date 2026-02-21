@@ -6,6 +6,10 @@ import { DailyHealthService } from './Infrastructure/healthCheck/mongodb';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: '*',
+  });
+
   // Enable global validation pipe
   app.useGlobalPipes(new ValidationPipe());
 
