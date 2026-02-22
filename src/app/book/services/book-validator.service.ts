@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { BookModel } from 'src/shared/models/booking.model';
-import { BookRepository } from 'src/shared/repositories/booking.repository';
+import { BookRepository } from 'src/shared/repositories/book.repository';
 
 @Injectable()
 export class BookingValidatorService {

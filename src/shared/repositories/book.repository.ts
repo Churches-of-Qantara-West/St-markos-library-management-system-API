@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Book } from '../schemas/booking.schemas';
 import { BookModel } from '../models/booking.model';
-import { SearchBookingDto } from 'src/app/booking/dto/search-booking.dto';
+import { SearchBookingDto } from 'src/app/book/dto/search-book.dto';
 
 export class BookRepository {
   readonly searchableFields = ['title', 'categories', 'authors', 'translators', 'publishers'];

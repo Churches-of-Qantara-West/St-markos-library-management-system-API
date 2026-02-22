@@ -1,8 +1,8 @@
-import { CreateBookingDto } from 'src/app/booking/dto/create-booking.dto';
+import { CreateBookingDto } from 'src/app/book/dto/create-book.dto';
 import { BookModel } from '../models/booking.model';
-import { UpdateBookingDto } from 'src/app/booking/dto/update-booking.dto';
+import { UpdateBookingDto } from 'src/app/book/dto/update-book.dto';
 
-export class BookingMapper {
+export class BookMapper {
   static createDtoToModel(dto: CreateBookingDto): BookModel {
     return {
       image: dto.image,

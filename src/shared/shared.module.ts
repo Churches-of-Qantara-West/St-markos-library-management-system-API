@@ -7,7 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schemas';
 import { Verification, VerificationSchema } from './schemas/verification.schemas';
 import { Book, BookSchema } from './schemas/booking.schemas';
-import { BookRepository } from './repositories/booking.repository';
+import { BookRepository } from './repositories/book.repository';
 
 @Module({
   imports: [
