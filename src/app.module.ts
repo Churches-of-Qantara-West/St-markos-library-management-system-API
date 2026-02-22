@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SharedModule } from './shared/shared.module';
-import { BookingModule } from './app/booking/booking.module';
+import { BookModule } from './app/book/booking.module';
 import { InfrastructureModule } from './Infrastructure/infrastrcture.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
@@ -20,7 +20,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       inject: [ConfigService],
     }),
     SharedModule,
-    BookingModule,
+    BookModule,
     InfrastructureModule,
   ],
   controllers: [AppController],
