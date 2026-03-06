@@ -1,26 +1,76 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBookingDto } from '../dto/create-booking.dto';
 import { UpdateBookingDto } from '../dto/update-booking.dto';
+import { BookingRepository } from 'src/shared/repositories/booking.repository';
+import { BookingMapper } from 'src/shared/mappers/booking.mapper';
+import { BookingValidatorService } from './booking-validator.service';
+import { BookingModel } from 'src/shared/models/booking.model';
 
 @Injectable()
 export class BookingService {
-  create(createBookingDto: CreateBookingDto) {
-    return 'This action adds a new booking';
+  constructor(
+    private readonly bookingRepository: BookingRepository,
+    private readonly bookingValidatorService: BookingValidatorService,
+  ) {}
+
+  async create(createBookingDto: CreateBookingDto, userId: string): Promise<BookingModel> {
+    // 1- Validate that the book exists
+    await this.bookingValidatorService.validateBookExists(createBookingDto.bookId);
+
+    // 2- validate that the user does not have an action booking for the same book
+    await this.bookingValidatorService.validateNoActionBookingForBook(createBookingDto.bookId, userId);
+
+    // 2- Map the DTO to the BookingModel entity with authenticated user ID
+    const bookingModel = BookingMapper.createDtoToModel(createBookingDto, userId);
+
+    // 3- Create the booking
+    return await this.bookingRepository.create(bookingModel);
   }
 
-  findAll() {
-    return `This action returns all booking`;
+  // This method is used to get all bookings for the authenticated user
+  async findAllBookingsForSpecificUser(userId: string): Promise<BookingModel[]> {
+    return await this.bookingRepository.findAllByUserId(userId);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} booking`;
+  // get all bookings
+  async findAllBookings(): Promise<BookingModel[]> {
+    return await this.bookingRepository.findAll();
   }
 
-  update(id: number, updateBookingDto: UpdateBookingDto) {
-    return `This action updates a #${id} booking`;
+  async findOne(id: string, userId: string): Promise<BookingModel | null> {
+    // 1- Retrieve the booking from the repository
+    const booking: BookingModel | null = await this.bookingRepository.findById(id);
+
+    // 2- Validate that the booking exists
+    this.bookingValidatorService.validateBookingExists(booking, id);
+
+    // 3- Return the found booking
+    return booking;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} booking`;
+  async update(id: string, updateBookingDto: UpdateBookingDto, userId: string): Promise<BookingModel | null> {
+    // 1- Check if the booking exists
+    const existingBooking: BookingModel | null = await this.bookingRepository.findById(id);
+    this.bookingValidatorService.validateBookingExists(existingBooking, id);
+
+    // 2- If the bookId is being updated, validate that the book exists
+    if (updateBookingDto.bookId) {
+      await this.bookingValidatorService.validateBookExists(updateBookingDto.bookId);
+    }
+
+    // 3- Map the update DTO to the existing booking entity with authenticated user ID
+    const bookingEntity = BookingMapper.updateDtoToModel(updateBookingDto, existingBooking, userId);
+
+    // 4- Update the booking in the repository
+    return await this.bookingRepository.update(id, bookingEntity);
+  }
+
+  async remove(id: string, userId: string): Promise<boolean> {
+    // 1- Validate that the booking exists before attempting to delete
+    const existingBooking: BookingModel | null = await this.bookingRepository.findById(id);
+    this.bookingValidatorService.validateBookingExists(existingBooking, id);
+
+    // 2- Delete the booking from the repository
+    return this.bookingRepository.delete(id);
   }
 }

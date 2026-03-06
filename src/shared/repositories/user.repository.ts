@@ -25,6 +25,7 @@ export class UserRepository {
 
   private mapToModel(userDoc: User): UserModel {
     return {
+      id: userDoc._id.toString(),
       name: userDoc.name,
       email: userDoc.email,
       password: userDoc.password,

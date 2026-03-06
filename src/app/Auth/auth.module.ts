@@ -4,13 +4,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { SharedModule } from '../../shared/shared.module';
+import { AuthValidatorService } from './services/auth-validator.service';
 
 @Module({
   imports: [
-    // ConfigModule removed to use global instance
     PassportModule,
     TypeOrmModule.forFeature([]),
     JwtModule.registerAsync({
@@ -24,7 +24,7 @@ import { SharedModule } from '../../shared/shared.module';
     SharedModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
+  providers: [AuthService, JwtStrategy, AuthValidatorService],
+  exports: [AuthService, JwtStrategy, AuthValidatorService],
 })
 export class AuthModule {}

@@ -5,8 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SharedModule } from './shared/shared.module';
 import { BookModule } from './app/book/booking.module';
+import { BookingModule } from './app/booking/booking.module';
 import { InfrastructureModule } from './Infrastructure/infrastrcture.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AuthModule } from './app/Auth/auth.module';
+import { CategoryModule } from './app/category/category.module';
 
 @Module({
   imports: [
@@ -19,8 +22,11 @@ import { ScheduleModule } from '@nestjs/schedule';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
     SharedModule,
     BookModule,
+    BookingModule,
+    CategoryModule,
     InfrastructureModule,
   ],
   controllers: [AppController],

@@ -1,16 +1,16 @@
 import { CreateBookingDto } from 'src/app/book/dto/create-book.dto';
-import { BookModel } from '../models/booking.model';
+import { BookModel } from '../models/book.model';
 import { UpdateBookingDto } from 'src/app/book/dto/update-book.dto';
 
 export class BookMapper {
-  static createDtoToModel(dto: CreateBookingDto): BookModel {
+  static createDtoToModel(dto: Omit<CreateBookingDto, 'category'> & { categoryId: string }): BookModel {
     return {
       image: dto.image,
       title: dto.title,
       subtitle: dto.subtitle,
       authors: dto.authors,
       translators: dto.translators,
-      categories: dto.categories,
+      categoryId: dto.categoryId,
       series: dto.series,
       numberInSeries: dto.numberInSeries,
       publishers: dto.publishers,
@@ -22,14 +22,14 @@ export class BookMapper {
     };
   }
 
-  static updateDtoToModel(dto: UpdateBookingDto, existingModel: BookModel): Partial<BookModel> {
+  static updateDtoToModel(dto: Partial<Omit<UpdateBookingDto, 'category'> & { categoryId: string }>, existingModel: BookModel): Partial<BookModel> {
     return {
       image: dto.image || existingModel.image,
       title: dto.title || existingModel.title,
       subtitle: dto.subtitle || existingModel.subtitle,
       authors: dto.authors || existingModel.authors,
       translators: dto.translators || existingModel.translators,
-      categories: dto.categories || existingModel.categories,
+      categoryId: dto.categoryId || existingModel.categoryId,
       series: dto.series || existingModel.series,
       numberInSeries: dto.numberInSeries || existingModel.numberInSeries,
       publishers: dto.publishers || existingModel.publishers,

@@ -1,43 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { BookingStatus } from '../enums/booking-status.enum';
 
-@Schema({ collection: 'books', timestamps: true, versionKey: false })
-export class Book extends Document {
-  @Prop({ type: String, required: true })
-  image: string;
+@Schema({ collection: 'bookings', timestamps: true, versionKey: false })
+export class Booking extends Document {
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Book', required: true })
+  bookId: string;
 
-  @Prop({ type: String, unique: true, required: true })
-  title: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
+  userId: string;
 
-  @Prop({ type: String, required: false })
-  subtitle: string;
+  @Prop({ type: Date, required: true })
+  startDate: Date;
 
-  @Prop({ type: String, required: true })
-  authors: string;
+  @Prop({ type: Date, required: true })
+  endDate: Date;
 
-  @Prop({ type: String, required: false })
-  translators: string;
-
-  @Prop({ type: String, required: true })
-  categories: string;
-
-  @Prop({ type: String, required: false })
-  series: string;
-
-  @Prop({ type: String, required: false })
-  numberInSeries: string;
-
-  @Prop({ type: String, required: true })
-  publishers: string;
-
-  @Prop({ type: String, required: true })
-  description: string;
-
-  @Prop({ type: Number, required: true })
-  pages: number;
-
-  @Prop({ type: Number, required: true, default: 1 })
-  numberOfCopies: number;
+  @Prop({ type: String, enum: Object.values(BookingStatus), default: BookingStatus.PENDING, required: true })
+  status: BookingStatus;
 
   @Prop({ default: Date.now })
   createdAt: Date;
@@ -46,4 +26,4 @@ export class Book extends Document {
   updatedAt: Date;
 }
 
-export const BookSchema = SchemaFactory.createForClass(Book);
+export const BookingSchema = SchemaFactory.createForClass(Booking);
