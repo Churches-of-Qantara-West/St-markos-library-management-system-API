@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request, Patch } from '@nestjs/common';
 import { BookingService } from './services/booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
 import { JwtAuthGuard } from '../Auth/guards/jwt-auth.guard';
 
 @Controller('booking')
@@ -15,7 +14,7 @@ export class BookingController {
   }
 
   @Get('all')
-  findAll(@Request() req) {
+  findAll() {
     return this.bookingService.findAllBookings();
   }
 
@@ -25,13 +24,13 @@ export class BookingController {
   }
 
   @Get(':id')
-  findOne(@Request() req, @Param('id') id: string) {
-    return this.bookingService.findOne(id, req.user.userId);
+  findOne(@Param('id') id: string) {
+    return this.bookingService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Request() req, @Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
-    return this.bookingService.update(id, updateBookingDto, req.user.userId);
+  acceptBookingRequest(@Param('id') id: string) {
+    return this.bookingService.acceptBookingRequest(id);
   }
 
   @Delete(':id')

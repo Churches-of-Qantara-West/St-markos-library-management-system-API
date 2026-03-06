@@ -11,7 +11,12 @@ async function bootstrap() {
   });
 
   // Enable global validation pipe
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
 
   // Manually trigger the daily MongoDB health check on application startup
   const dailyHealthService: DailyHealthService = app.get(DailyHealthService);

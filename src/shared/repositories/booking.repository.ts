@@ -39,8 +39,8 @@ export class BookingRepository {
     return bookings.map((booking) => this.mapToModel(booking));
   }
 
-  async update(id: string, booking: Partial<BookingModel>): Promise<BookingModel | null> {
-    const updatedBooking: Booking | null = await this.bookingModel.findByIdAndUpdate(id, booking, { new: true }).exec();
+  async update(id: string): Promise<BookingModel | null> {
+    const updatedBooking: Booking | null = await this.bookingModel.findByIdAndUpdate(id, { status: 'ACCEPTED' }, { new: true }).exec();
     if (!updatedBooking) {
       return null;
     }

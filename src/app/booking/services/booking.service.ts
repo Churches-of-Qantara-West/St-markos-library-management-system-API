@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBookingDto } from '../dto/create-booking.dto';
-import { UpdateBookingDto } from '../dto/update-booking.dto';
 import { BookingRepository } from 'src/shared/repositories/booking.repository';
 import { BookingMapper } from 'src/shared/mappers/booking.mapper';
 import { BookingValidatorService } from './booking-validator.service';
@@ -37,7 +36,7 @@ export class BookingService {
     return await this.bookingRepository.findAll();
   }
 
-  async findOne(id: string, userId: string): Promise<BookingModel | null> {
+  async findOne(id: string): Promise<BookingModel | null> {
     // 1- Retrieve the booking from the repository
     const booking: BookingModel | null = await this.bookingRepository.findById(id);
 
@@ -48,21 +47,13 @@ export class BookingService {
     return booking;
   }
 
-  async update(id: string, updateBookingDto: UpdateBookingDto, userId: string): Promise<BookingModel | null> {
+  async acceptBookingRequest(id: string): Promise<BookingModel | null> {
     // 1- Check if the booking exists
     const existingBooking: BookingModel | null = await this.bookingRepository.findById(id);
     this.bookingValidatorService.validateBookingExists(existingBooking, id);
 
-    // 2- If the bookId is being updated, validate that the book exists
-    if (updateBookingDto.bookId) {
-      await this.bookingValidatorService.validateBookExists(updateBookingDto.bookId);
-    }
-
-    // 3- Map the update DTO to the existing booking entity with authenticated user ID
-    const bookingEntity = BookingMapper.updateDtoToModel(updateBookingDto, existingBooking, userId);
-
-    // 4- Update the booking in the repository
-    return await this.bookingRepository.update(id, bookingEntity);
+    // 2- accept the booking request
+    return await this.bookingRepository.update(id);
   }
 
   async remove(id: string, userId: string): Promise<boolean> {
