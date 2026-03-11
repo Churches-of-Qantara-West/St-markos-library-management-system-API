@@ -3,7 +3,7 @@ import { BookService } from './services/booking.service';
 import { CreateBookingDto } from './dto/create-book.dto';
 import { UpdateBookingDto } from './dto/update-book.dto';
 import { SearchBookingDto } from './dto/search-book.dto';
-import { BookModel } from 'src/shared/models/booking.model';
+import { BookModel } from 'src/shared/models/book.model';
 
 @Controller('book')
 export class BookController {
@@ -22,6 +22,11 @@ export class BookController {
   @Get('search')
   search(@Query() searchParams: SearchBookingDto): Promise<BookModel[]> {
     return this.bookService.searchBooks(searchParams);
+  }
+
+  @Get('category/:categoryId')
+  findByCategory(@Param('categoryId') categoryId: string): Promise<BookModel[]> {
+    return this.bookService.findByCategory(categoryId);
   }
 
   @Get(':id')

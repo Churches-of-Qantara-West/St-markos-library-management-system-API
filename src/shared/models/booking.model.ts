@@ -1,17 +1,12 @@
-export class BookModel {
+import { BookingStatus } from '../enums/booking-status.enum';
+
+export class BookingModel {
   id?: string;
-  image: string;
-  title: string;
-  subtitle: string;
-  authors: string;
-  translators: string;
-  categories: string;
-  series: string;
-  numberInSeries: string;
-  publishers: string;
-  description: string;
-  pages: number;
-  numberOfCopies: number;
+  bookId: string;
+  userId: string;
+  startDate: Date;
+  endDate: Date;
+  status: BookingStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }

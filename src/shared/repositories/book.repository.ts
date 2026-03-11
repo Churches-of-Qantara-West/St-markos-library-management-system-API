@@ -1,16 +1,20 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Book } from '../schemas/booking.schemas';
-import { BookModel } from '../models/booking.model';
 import { SearchBookingDto } from 'src/app/book/dto/search-book.dto';
+import { Book } from '../schemas/book.schemas';
+import { BookModel } from '../models/book.model';
 
 export class BookRepository {
-  readonly searchableFields = ['title', 'categories', 'authors', 'translators', 'publishers'];
+  readonly searchableFields = ['title', 'authors', 'translators', 'publishers'];
 
   constructor(@InjectModel(Book.name) private readonly bookModel: Model<Book>) {}
 
   async create(book: BookModel): Promise<BookModel> {
-    const createdBook: Book | null = await this.bookModel.create(book);
+    const bookData: Omit<BookModel, 'categoryId'> & { categoryId: Types.ObjectId } = {
+      ...book,
+      categoryId: new Types.ObjectId(book.categoryId),
+    };
+    const createdBook: Book | null = await this.bookModel.create(bookData as any);
     return this.mapToModel(createdBook);
   }
 
@@ -35,8 +39,18 @@ export class BookRepository {
     return this.mapToModel(book);
   }
 
+  async findByCategoryId(categoryId: string): Promise<BookModel[]> {
+    const filter: Record<string, unknown> = { categoryId };
+    const books: Book[] = await this.bookModel.find(filter).exec();
+    return books.map((book) => this.mapToModel(book));
+  }
+
   async update(id: string, book: Partial<BookModel>): Promise<BookModel | null> {
-    const updatedBook: Book | null = await this.bookModel.findByIdAndUpdate(id, book, { new: true }).exec();
+    const updateData = { ...book };
+    if (updateData.categoryId) {
+      updateData.categoryId = new Types.ObjectId(updateData.categoryId) as any;
+    }
+    const updatedBook: Book | null = await this.bookModel.findByIdAndUpdate(id, updateData, { new: true }).exec();
     if (!updatedBook) {
       return null;
     }
@@ -72,7 +86,7 @@ export class BookRepository {
       subtitle: bookDoc.subtitle,
       authors: bookDoc.authors,
       translators: bookDoc.translators,
-      categories: bookDoc.categories,
+      categoryId: bookDoc.categoryId?.toString(),
       series: bookDoc.series,
       numberInSeries: bookDoc.numberInSeries,
       publishers: bookDoc.publishers,
