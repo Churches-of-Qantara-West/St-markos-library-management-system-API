@@ -21,7 +21,7 @@ export class CreateBookingDto {
 
   @IsString()
   @IsNotEmpty()
-  categories: string;
+  category: string;
 
   @IsString()
   series: string;

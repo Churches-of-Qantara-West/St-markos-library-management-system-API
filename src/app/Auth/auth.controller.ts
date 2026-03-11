@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { Body, Controller, Post } from '@nestjs/common';
+import { AuthService } from './services/auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { VerificationDto } from './dto/verification.dto';
@@ -24,7 +24,7 @@ export class AuthController {
     return this.authService.verify(verification);
   }
 
-  @Get('resend-verification')
+  @Post('resend-verification')
   async resendVerification(@Body() resendVerificationCodeDto: ResendVerificationCodeDto): Promise<{ message: string }> {
     return this.authService.resendVerification(resendVerificationCodeDto);
   }
