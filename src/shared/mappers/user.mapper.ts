@@ -5,7 +5,7 @@ export class UserMapper {
   static registerDtoToModel(dto: RegisterDto): UserModel {
     return {
       name: dto.name,
-      email: dto.email,
+      phoneNumber: dto.phoneNumber,
       password: dto.password,
       isVerified: false,
       createdAt: new Date(),

@@ -16,25 +16,25 @@ export class VerificationRepository {
     return this.mapToModel(doc);
   }
 
-  async findByEmail(email: string): Promise<VerificationModel | null> {
-    const doc: Verification | null = await this.verificationModel.findOne({ email }).exec();
+  async findByPhoneNumber(phoneNumber: string): Promise<VerificationModel | null> {
+    const doc: Verification | null = await this.verificationModel.findOne({ phoneNumber }).exec();
     return doc ? this.mapToModel(doc) : null;
   }
 
-  async updateCode(email: string, code: string): Promise<VerificationModel | null> {
+  async updateCode(phoneNumber: string, code: string): Promise<VerificationModel | null> {
     const doc: Verification | null = await this.verificationModel
-      .findOneAndUpdate({ email }, { verificationCode: code, updatedAt: new Date() }, { new: true })
+      .findOneAndUpdate({ phoneNumber }, { verificationCode: code, updatedAt: new Date() }, { new: true })
       .exec();
     return doc ? this.mapToModel(doc) : null;
   }
 
-  async deleteByEmail(email: string): Promise<any> {
-    return this.verificationModel.deleteOne({ email }).exec();
+  async deleteByPhoneNumber(phoneNumber: string): Promise<any> {
+    return this.verificationModel.deleteOne({ phoneNumber }).exec();
   }
 
   private mapToModel(doc: Verification): VerificationModel {
     return {
-      email: doc.email,
+      phoneNumber: doc.phoneNumber,
       verificationCode: doc.verificationCode,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,

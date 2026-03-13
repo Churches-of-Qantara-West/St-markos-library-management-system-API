@@ -11,23 +11,23 @@ export class UserRepository {
     return this.mapToModel(createdUser);
   }
 
-  async findByEmail(email: string): Promise<UserModel | null> {
-    const userDoc: User | null = await this.userModel.findOne({ email: email }).exec();
+  async findByPhoneNumber(phoneNumber: string): Promise<UserModel | null> {
+    const userDoc: User | null = await this.userModel.findOne({ phoneNumber: phoneNumber }).exec();
     if (!userDoc) {
       return null;
     }
     return this.mapToModel(userDoc);
   }
 
-  async updateVerificationStatus(email: string, isVerified: boolean): Promise<void> {
-    await this.userModel.updateOne({ email: email }, { isVerified: isVerified }).exec();
+  async updateVerificationStatus(phoneNumber: string, isVerified: boolean): Promise<void> {
+    await this.userModel.updateOne({ phoneNumber: phoneNumber }, { isVerified: isVerified }).exec();
   }
 
   private mapToModel(userDoc: User): UserModel {
     return {
       id: userDoc._id.toString(),
       name: userDoc.name,
-      email: userDoc.email,
+      phoneNumber: userDoc.phoneNumber,
       password: userDoc.password,
       isVerified: userDoc.isVerified,
       createdAt: userDoc.createdAt,
