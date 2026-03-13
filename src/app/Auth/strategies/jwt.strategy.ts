@@ -18,15 +18,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { email: string }): Promise<{ email: string; userId: string } | null> {
-    const user = await this.userRepository.findByEmail(payload.email);
+  async validate(payload: { phoneNumber: string }): Promise<{ phoneNumber: string; userId: string } | null> {
+    const user = await this.userRepository.findByPhoneNumber(payload.phoneNumber);
     if (!user || !user.isVerified || user.id === undefined) {
       return null;
     }
-    return { email: user.email, userId: user.id };
+    return { phoneNumber: user.phoneNumber, userId: user.id };
   }
 
-  generateToken(payload: { email: string }): string {
+  generateToken(payload: { phoneNumber: string }): string {
     const secret: string = this.configService.get<string>('JWT_SECRET') || '';
     return jwt.sign(payload, secret, { expiresIn: '24h' });
   }

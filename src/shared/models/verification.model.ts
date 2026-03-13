@@ -1,5 +1,5 @@
 export class VerificationModel {
-  email: string;
+  phoneNumber: string;
   verificationCode: string;
   createdAt?: Date;
   updatedAt?: Date;

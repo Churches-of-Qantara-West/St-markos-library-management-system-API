@@ -1,9 +1,9 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsMobilePhone, IsNotEmpty, IsString } from 'class-validator';
 
 export class VerificationDto {
-  @IsEmail()
   @IsNotEmpty()
-  email: string;
+  @IsMobilePhone('ar-EG', {}, { message: 'Invalid Egyptian phone number' })
+  phoneNumber: string;
 
   @IsString()
   @IsNotEmpty()
