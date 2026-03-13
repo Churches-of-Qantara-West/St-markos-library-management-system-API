@@ -26,24 +26,24 @@ export class AuthValidatorService {
     }
   }
 
-  async validateUserDoesNotExist(email: string): Promise<void> {
-    const existingUser: UserModel | null = await this.userRepository.findByEmail(email);
+  async validateUserDoesNotExist(phoneNumber: string): Promise<void> {
+    const existingUser: UserModel | null = await this.userRepository.findByPhoneNumber(phoneNumber);
     if (existingUser) {
-      throw new BadRequestException('User with this email already exists');
+      throw new BadRequestException('User with this phone number already exists');
     }
   }
 
-  async validateVerificationCode(email: string, verificationCode: string): Promise<void> {
-    const record = await this.verificationRepository.findByEmail(email);
+  async validateVerificationCode(phoneNumber: string, verificationCode: string): Promise<void> {
+    const record = await this.verificationRepository.findByPhoneNumber(phoneNumber);
     if (verificationCode !== record?.verificationCode) {
-      throw new BadRequestException('Invalid verification code or email');
+      throw new BadRequestException('Invalid verification code or phone number');
     }
   }
 
-  async validateUserExists(email: string): Promise<UserModel> {
-    const user = await this.userRepository.findByEmail(email);
+  async validateUserExists(phoneNumber: string): Promise<UserModel> {
+    const user = await this.userRepository.findByPhoneNumber(phoneNumber);
     if (!user) {
-      throw new BadRequestException('User with this email does not exist');
+      throw new BadRequestException('User with this phone number does not exist');
     }
     return user;
   }

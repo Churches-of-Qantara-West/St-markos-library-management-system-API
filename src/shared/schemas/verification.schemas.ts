@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema({ collection: 'verifications', timestamps: true })
 export class Verification extends Document {
   @Prop({ required: true, unique: true })
-  email: string;
+  phoneNumber: string;
 
   @Prop({ required: true, length: 6 })
   verificationCode: string;
