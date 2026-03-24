@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MailerService } from './mailer/mailer.service';
 import { UserRepository } from './repositories/user.repository';
 import { VerificationRepository } from './repositories/verification.repository';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -24,7 +23,7 @@ import { CategoryRepository } from './repositories/category.repository';
       { name: Category.name, schema: CategorySchema },
     ]),
   ],
-  providers: [UserRepository, VerificationRepository, BookRepository, BookingRepository, CategoryRepository, MailerService],
-  exports: [UserRepository, VerificationRepository, BookRepository, BookingRepository, CategoryRepository, MailerService],
+  providers: [UserRepository, VerificationRepository, BookRepository, BookingRepository, CategoryRepository],
+  exports: [UserRepository, VerificationRepository, BookRepository, BookingRepository, CategoryRepository],
 })
 export class SharedModule {}
