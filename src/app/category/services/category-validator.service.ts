@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { CategoryModel } from 'src/shared/models/category.model';
+import { CategoryModel } from '../../../shared/models/category.model';
 
 @Injectable()
 export class CategoryValidatorService {

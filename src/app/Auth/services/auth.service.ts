@@ -2,13 +2,12 @@ import * as bcrypt from 'bcryptjs';
 import { Injectable } from '@nestjs/common';
 import { JwtStrategy } from '../strategies/jwt.strategy';
 import { LoginDto } from '../dto/login.dto';
-import { UserRepository } from 'src/shared/repositories/user.repository';
+import { UserRepository } from '../../../shared/repositories/user.repository';
 import { RegisterDto } from '../dto/register.dto';
-import { UserMapper } from 'src/shared/mappers/user.mapper';
-import { VerificationRepository } from 'src/shared/repositories/verification.repository';
-import { UserModel } from 'src/shared/models/user.model';
+import { UserMapper } from '../../../shared/mappers/user.mapper';
+import { VerificationRepository } from '../../../shared/repositories/verification.repository';
+import { UserModel } from '../../../shared/models/user.model';
 import { VerificationDto } from '../dto/verification.dto';
-// import { MailerService } from 'src/shared/mailer/mailer.service';
 import { ResendVerificationCodeDto } from '../dto/resend-verification-code.dto';
 import { AuthValidatorService } from './auth-validator.service';
 
@@ -16,7 +15,6 @@ import { AuthValidatorService } from './auth-validator.service';
 export class AuthService {
   constructor(
     private readonly jwtStrategy: JwtStrategy,
-    // private readonly mailerService: MailerService,
     private readonly userRepository: UserRepository,
     private readonly authValidatorService: AuthValidatorService,
     private readonly verificationRepository: VerificationRepository,

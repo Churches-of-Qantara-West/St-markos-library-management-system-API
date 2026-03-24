@@ -1,8 +1,8 @@
 import * as bcrypt from 'bcryptjs';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserModel } from 'src/shared/models/user.model';
-import { UserRepository } from 'src/shared/repositories/user.repository';
-import { VerificationRepository } from 'src/shared/repositories/verification.repository';
+import { UserModel } from '../../../shared/models/user.model';
+import { UserRepository } from '../../../shared/repositories/user.repository';
+import { VerificationRepository } from '../../../shared/repositories/verification.repository';
 
 @Injectable()
 export class AuthValidatorService {

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { UpdateBookingDto } from '../dto/update-book.dto';
 import { CreateBookingDto } from '../dto/create-book.dto';
 import { SearchBookingDto } from '../dto/search-book.dto';
-import { BookRepository } from 'src/shared/repositories/book.repository';
-import { BookModel } from 'src/shared/models/book.model';
-import { BookMapper } from 'src/shared/mappers/book.mapper';
+import { BookRepository } from '../../../shared/repositories/book.repository';
+import { BookModel } from '../../../shared/models/book.model';
+import { BookMapper } from '../../../shared/mappers/book.mapper';
 import { BookingValidatorService } from './book-validator.service';
 
 @Injectable()

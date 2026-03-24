@@ -3,7 +3,7 @@ import { BookService } from './services/booking.service';
 import { CreateBookingDto } from './dto/create-book.dto';
 import { UpdateBookingDto } from './dto/update-book.dto';
 import { SearchBookingDto } from './dto/search-book.dto';
-import { BookModel } from 'src/shared/models/book.model';
+import { BookModel } from '../../shared/models/book.model';
 
 @Controller('book')
 export class BookController {
