@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBookingDto } from '../dto/create-booking.dto';
-import { BookingRepository } from 'src/shared/repositories/booking.repository';
-import { BookingMapper } from 'src/shared/mappers/booking.mapper';
+import { BookingRepository } from '../../../shared/repositories/booking.repository';
+import { BookingMapper } from '../../../shared/mappers/booking.mapper';
 import { BookingValidatorService } from './booking-validator.service';
-import { BookingModel } from 'src/shared/models/booking.model';
+import { BookingModel } from '../../../shared/models/booking.model';
 
 @Injectable()
 export class BookingService {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryRepository } from 'src/shared/repositories/category.repository';
-import { CategoryModel } from 'src/shared/models/category.model';
-import { CategoryMapper } from 'src/shared/mappers/category.mapper';
+import { CategoryRepository } from '../../../shared/repositories/category.repository';
+import { CategoryModel } from '../../../shared/models/category.model';
+import { CategoryMapper } from '../../../shared/mappers/category.mapper';
 import { CategoryValidatorService } from './category-validator.service';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
