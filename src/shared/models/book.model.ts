@@ -3,8 +3,8 @@ export class BookModel {
   image: string;
   title: string;
   subtitle: string;
-  authors: string;
-  translators: string;
+  authors: string[];
+  translators: string[];
   categoryId: string;
   series: string;
   numberInSeries: string;

@@ -1,8 +1,8 @@
 import { RegisterDto } from 'src/app/Auth/dto/register.dto';
-import { UserModel } from '../models/user.model';
+import { AuthUserModel } from '../models/auth-user.model';
 
 export class UserMapper {
-  static registerDtoToModel(dto: RegisterDto): UserModel {
+  static registerDtoToModel(dto: RegisterDto): AuthUserModel {
     return {
       name: dto.name,
       phoneNumber: dto.phoneNumber,

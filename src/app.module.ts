@@ -10,6 +10,7 @@ import { InfrastructureModule } from './Infrastructure/infrastrcture.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './app/Auth/auth.module';
 import { CategoryModule } from './app/category/category.module';
+import { UserModule } from './app/user/user.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CategoryModule } from './app/category/category.module';
     BookingModule,
     CategoryModule,
     InfrastructureModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

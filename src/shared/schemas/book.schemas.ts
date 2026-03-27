@@ -12,11 +12,11 @@ export class Book extends Document {
   @Prop({ type: String, required: false })
   subtitle: string;
 
-  @Prop({ type: String, required: true })
-  authors: string;
+  @Prop({ type: [String], required: true })
+  authors: string[];
 
-  @Prop({ type: String, required: false })
-  translators: string;
+  @Prop({ type: [String], required: false })
+  translators: string[];
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Category', required: true })
   categoryId: MongooseSchema.Types.ObjectId;
