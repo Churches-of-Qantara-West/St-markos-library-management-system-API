@@ -6,7 +6,7 @@ import { UserRepository } from '../../../shared/repositories/user.repository';
 import { RegisterDto } from '../dto/register.dto';
 import { UserMapper } from '../../../shared/mappers/user.mapper';
 import { VerificationRepository } from '../../../shared/repositories/verification.repository';
-import { UserModel } from '../../../shared/models/user.model';
+import { AuthUserModel } from '../../../shared/models/auth-user.model';
 import { VerificationDto } from '../dto/verification.dto';
 import { ResendVerificationCodeDto } from '../dto/resend-verification-code.dto';
 import { AuthValidatorService } from './auth-validator.service';
@@ -22,7 +22,7 @@ export class AuthService {
 
   async login(user: LoginDto): Promise<{ access_token: string }> {
     // 1 - find user by phone number
-    const foundUser: UserModel | null = await this.userRepository.findByPhoneNumber(user.phoneNumber);
+    const foundUser: AuthUserModel | null = await this.userRepository.findByPhoneNumber(user.phoneNumber);
 
     // 2 - validate user credentials & verification status
     await this.authValidatorService.validateUserCredentials(foundUser, user.password);
@@ -43,8 +43,8 @@ export class AuthService {
     user.password = await bcrypt.hash(user.password, 10);
 
     // 3 - create user
-    const userModel: UserModel = UserMapper.registerDtoToModel(user);
-    await this.userRepository.create(userModel);
+    const AuthUserModel: AuthUserModel = UserMapper.registerDtoToModel(user);
+    await this.userRepository.create(AuthUserModel);
 
     // 4 - create verification code & send email
     const randomCode: string = this.randomCode();
