@@ -39,6 +39,7 @@ export class UserRepository {
       phoneNumber: userDoc.phoneNumber,
       password: userDoc.password,
       isVerified: userDoc.isVerified,
+      role: userDoc.role,
       createdAt: userDoc.createdAt,
       updatedAt: userDoc.updatedAt,
     };

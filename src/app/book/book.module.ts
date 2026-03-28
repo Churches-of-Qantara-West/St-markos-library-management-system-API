@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { BookService } from './services/booking.service';
-import { BookController } from './booking.controller';
+import { BookService } from './services/book.service';
+import { BookController } from './book.controller';
 import { SharedModule } from '../../shared/shared.module';
 import { BookingValidatorService } from './services/book-validator.service';
 

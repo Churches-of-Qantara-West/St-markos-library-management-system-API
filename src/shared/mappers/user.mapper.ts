@@ -8,6 +8,7 @@ export class UserMapper {
       phoneNumber: dto.phoneNumber,
       password: dto.password,
       isVerified: false,
+      role: 'user',
       createdAt: new Date(),
       updatedAt: new Date(),
     };

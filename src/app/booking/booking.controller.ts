@@ -2,9 +2,12 @@ import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request, Patch }
 import { BookingService } from './services/booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { JwtAuthGuard } from '../Auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../Auth/guards/roles.guard';
+import { Roles } from '../Auth/decorators/roles.decorator';
+import { UserRoles } from 'src/shared/enums/user-rols.enum';
 
 @Controller('booking')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
@@ -29,6 +32,7 @@ export class BookingController {
   }
 
   @Patch(':id')
+  @Roles(UserRoles.ADMIN)
   acceptBookingRequest(@Param('id') id: string) {
     return this.bookingService.acceptBookingRequest(id);
   }

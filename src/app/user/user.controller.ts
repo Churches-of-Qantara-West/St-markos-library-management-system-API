@@ -11,5 +11,4 @@ export class UserController {
   findOne(@Param('phoneNumber') phoneNumber: string) {
     return this.userService.findOne(phoneNumber);
   }
-  
 }
