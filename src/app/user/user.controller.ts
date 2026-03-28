@@ -1,7 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
+import { JwtAuthGuard } from '../Auth/guards/jwt-auth.guard';
 
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -9,4 +11,5 @@ export class UserController {
   findOne(@Param('phoneNumber') phoneNumber: string) {
     return this.userService.findOne(phoneNumber);
   }
+  
 }
