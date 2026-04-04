@@ -24,4 +24,9 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
+
+// Export bootstrap function for serverless environments
+export { bootstrap };
+
+// Call bootstrap for traditional server environments
 bootstrap();
