@@ -3,14 +3,17 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DailyHealthService } from './Infrastructure/healthCheck/mongodb';
 
+let app: any;
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  if (app) return app; // reuse cached instance
+
+  app = await NestFactory.create(AppModule);
 
   app.enableCors({
     origin: '*',
   });
 
-  // Enable global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -18,15 +21,23 @@ async function bootstrap() {
     }),
   );
 
-  // Manually trigger the daily MongoDB health check on application startup
   const dailyHealthService: DailyHealthService = app.get(DailyHealthService);
   await dailyHealthService.runDailyCheckMongoDb();
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.init(); // use init() instead of listen() for serverless
+
+  return app;
 }
 
-// Export bootstrap function for serverless environments
-export { bootstrap };
+// This is what serverless platforms look for
+export const handler = async (req: any, res: any) => {
+  const nestApp = await bootstrap();
+  nestApp.getHttpAdapter().getInstance()(req, res);
+};
 
-// Call bootstrap for traditional server environments
-bootstrap();
+// For local development, still start the server normally
+if (process.env.NODE_ENV !== 'production') {
+  bootstrap().then(nestApp => {
+    nestApp.listen(process.env.PORT ?? 3000);
+  });
+}
